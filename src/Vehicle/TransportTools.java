@@ -1,9 +1,26 @@
 package Vehicle;
 
 import java.io.*;
+import java.lang.reflect.Constructor;
+
 import Exceptions.DuplicateModelNameException;
 
 public class TransportTools {
+
+    public static Vehicle CreateVehicle(String mark, int sizeModels, Vehicle template) {
+        try {
+            Class<?> clazz = template.getClass();
+            Constructor<?> constructor = clazz.getConstructor(String.class, int.class);
+            return (Vehicle) constructor.newInstance(mark, sizeModels);
+
+        } catch (NoSuchMethodException e) {
+            return null;
+           
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
 
     public static double getAVGPrice(Vehicle vehicle) {
         double[] prices = vehicle.getPrices();
