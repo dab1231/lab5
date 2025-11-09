@@ -8,10 +8,11 @@ public class Scooter implements Vehicle {
     public Scooter(String mark, int size){
         this.mark = mark;
         this.models = new HashMap<>();
+        Random random = new Random();
+        
         if(size > 0){
             for(int i = 0; i < size; i++){
                 String name = String.format("Honda%d", i);
-                Random random = new Random();
                 double price = random.nextDouble(50000, 300000);
                 models.put(name,price);
             }

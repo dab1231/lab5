@@ -2,6 +2,7 @@ package Vehicle;
 
 import java.io.*;
 import java.lang.reflect.Constructor;
+import java.util.Scanner;
 
 import Exceptions.DuplicateModelNameException;
 
@@ -21,6 +22,21 @@ public class TransportTools {
         }
     }
 
+    public static double getAverageVeh(Vehicle... vehicles){
+        double totalSum = 0;
+        int totalcount = 0;
+        for(Vehicle v : vehicles){
+            double[] prices = v.getPrices();
+            for(double price : prices){
+             totalSum += price;
+                totalcount++;
+            }
+        }
+        if(totalcount == 0){
+            return 0;
+        }
+        return totalSum / totalcount;
+    }
 
     public static double getAVGPrice(Vehicle vehicle) {
         double[] prices = vehicle.getPrices();
@@ -139,38 +155,40 @@ public class TransportTools {
     public static void writeVehicle(Vehicle v, Writer out) throws IOException {
         PrintWriter pw = new PrintWriter(out);
         
-        pw.println(v.getVehicleType());
+        pw.printf("%s\n", v.getVehicleType());
         
-        pw.println(v.getMark());
+        pw.printf("%s\n", v.getMark());
         
-        pw.println(v.getSize());
+        pw.printf("%d\n", v.getSize());
         
         String[] names = v.getNames();
         double[] prices = v.getPrices();
         
         for (int i = 0; i < names.length; i++) {
-            pw.println(names[i]);
-            pw.println(prices[i]);
+            pw.printf("%s\n",names[i]);
+            pw.printf("%.2f\n",prices[i]);
         }
         
         pw.flush();
     }
 
     public static Vehicle readVehicle(Reader in) throws IOException {
-        BufferedReader br = new BufferedReader(in);
+        Scanner sc = new Scanner(in);
+
+        String type = sc.nextLine();
         
-        String type = br.readLine();
+        String mark = sc.nextLine();
         
-        String mark = br.readLine();
-        
-        int size = Integer.parseInt(br.readLine());
+        int size = sc.nextInt();
+        sc.nextLine();
         
         String[] names = new String[size];
         double[] prices = new double[size];
         
         for (int i = 0; i < size; i++) {
-            names[i] = br.readLine();
-            prices[i] = Double.parseDouble(br.readLine());
+            names[i] = sc.nextLine();
+            prices[i] = sc.nextDouble();
+            sc.nextLine();
         }
         
         Vehicle vehicle;
