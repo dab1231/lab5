@@ -12,7 +12,7 @@ public class Moped implements Vehicle {
         this.modelPrices = new LinkedList<>();
         if(size > 0){
             for(int i = 0; i < size; i++){
-                String name = String.format("Yamaha%d", i);
+                String name = String.format("%s%d", mark, i);
                 double price = 80000 + i * 20000;
                 modelNames.add(name);
                 modelPrices.add(price);

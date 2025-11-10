@@ -34,7 +34,7 @@ public class Motorcycle implements Vehicle, Cloneable {
 
             for (int i = 1; i < size; i++) {
                 try {
-                    this.addNewModel(String.format("BMW%d", i * 10), random.nextDouble(1000000, 8000000));
+                    this.addNewModel(String.format("%s%d", mark, i * 10), random.nextDouble(1000000, 8000000));
                 } catch (DuplicateModelNameException e) {
                 }
             }

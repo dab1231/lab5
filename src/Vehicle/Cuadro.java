@@ -12,7 +12,7 @@ public class Cuadro implements Vehicle {
         this.modelPrices = new ArrayList<>();
         if(size > 0){
             for(int i = 0; i < size; i++){
-                String name = String.format("Hyundai%d", i);
+                String name = String.format("%s%d", mark, i);
                 double price = 100000 + i * 50000;
                 modelNames.add(name);
                 modelPrices.add(price);

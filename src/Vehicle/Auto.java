@@ -22,7 +22,7 @@ public class Auto implements Vehicle {
         } else {
             models = new Model[size];
             for (int i = 0; i < size; i++) {
-                Model newModel = new Model(String.format("BMW%d", i * 10), random.nextInt(1000000, 8000000));
+                Model newModel = new Model(String.format("%s%d", mark, i * 10), random.nextInt(1000000, 8000000));
                 models[i] = newModel;
             }
         }

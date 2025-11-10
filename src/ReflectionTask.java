@@ -45,7 +45,7 @@ public class ReflectionTask {
         String className = args[0];      // Полное имя класса
         String methodName = args[1];     // Имя метода
         String modelName = args[2];      // Название модели
-        double priceStr = Double.parseDouble(args[3]);       // Новая цена
+        double prices = Double.parseDouble(args[3]);       // Новая цена
 
         try {
             Class<?> vehicleClass = Class.forName(className);
@@ -64,8 +64,8 @@ public class ReflectionTask {
             System.out.println("Параметры метода: " + java.util.Arrays.toString(method.getParameterTypes()));
             System.out.println();
 
-            System.out.println("Вызываем метод: " + methodName + "(\"" + modelName + "\", " + priceStr + ")");
-            method.invoke(vehicleInstance, modelName, priceStr);
+            System.out.println("Вызываем метод: " + methodName + "(\"" + modelName + "\", " + prices + ")");
+            method.invoke(vehicleInstance, modelName, prices);
             System.out.println("Метод успешно выполнен!");
 
             System.out.println("=== Информация об автомобиле ПОСЛЕ изменения цены ===  ");
