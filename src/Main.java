@@ -21,6 +21,7 @@ public class Main {
         String newMark = "Lada";
         int newSize = 5;
         Vehicle newAuto = TransportTools.CreateVehicle(newMark, newSize, templateAuto);
+        System.out.println(newAuto.getClass());
         System.out.println(newAuto);
 
 

@@ -1,23 +1,46 @@
 package Vehicle;
+import java.io.Serializable;
 import java.util.LinkedList;
 
+import Exceptions.ModelPriceOutOfBoundsException;
+import Exceptions.NoSuchModelNameException;
+
+import java.util.Iterator;
 public class Moped implements Vehicle {
     private String mark;
-    private LinkedList<String> modelNames;
-    private LinkedList<Double> modelPrices;
+    private LinkedList<Model> models;
+
+    public class Model implements Serializable{
+        private String name;
+        private double price;
+
+        public Model(String model, double price) {
+            this.name = model;
+            this.price = price;
+        }
+    }       
 
     public Moped(String mark, int size){
         this.mark = mark;
-        this.modelNames = new LinkedList<>();
-        this.modelPrices = new LinkedList<>();
+        this.models = new LinkedList<>();
         if(size > 0){
             for(int i = 0; i < size; i++){
                 String name = String.format("%s%d", mark, i);
                 double price = 80000 + i * 20000;
-                modelNames.add(name);
-                modelPrices.add(price);
+                models.add(new Model(name,price));
             }
         }
+    }
+
+    public Model findModel(String name){
+        Iterator<Model> i = models.iterator();
+        while(i.hasNext()){
+            Model model = i.next();
+            if(model.name.equals(name)){
+                return model;
+            }
+        }
+        return null;
     }
 
     @Override
@@ -27,30 +50,39 @@ public class Moped implements Vehicle {
 
     @Override
     public int getSize() {
-        return modelNames.size();
+        return models.size();
     }
 
     @Override
     public String[] getNames() {
-        return modelNames.toArray(new String[0]);
+        String[] names = new String[models.size()];
+        for(int i =0; i < models.size(); i++){
+            names[i] = models.get(i).name;
+        }
+        return names;
     }
+
+    
 
     @Override
     public double[] getPrices() {
-        double[] prices = new double[modelPrices.size()];
-        for(int i = 0; i < modelPrices.size(); i++){
-            prices[i] = modelPrices.get(i);
+        double[] prices = new double[models.size()];
+        for(int i = 0; i < models.size(); i++){
+            prices[i] = models.get(i).price;
         }
         return prices;
     }
     
     @Override
-    public void setModelPrice(String modelName, double newPrice) {
-        int index = modelNames.indexOf(modelName);
-        if(index == -1){
-            throw new IllegalArgumentException("Модель с именем " + modelName + " не найдена.");
+    public void setModelPrice(String modelName, double newPrice) throws NoSuchModelNameException{
+        if(newPrice <= 0){
+            throw new ModelPriceOutOfBoundsException(modelName);
         }
-        modelPrices.set(index, newPrice);
+        Model model = findModel(modelName);
+        if(model== null){
+            throw new NoSuchModelNameException(modelName);
+        }
+        model.price = newPrice;
     }
 
     @Override
@@ -58,8 +90,7 @@ public class Moped implements Vehicle {
         StringBuilder sb = new StringBuilder();
         sb.append("Марка: ").append(mark).append("\n");
         sb.append("Модели:").append("\n");
-        for(int i = 0; i < modelNames.size(); i++){
-            sb.append("Название: ").append(modelNames.get(i)).append(", Цена: ").append(modelPrices.get(i)).append("\n");
+        for(int i = 0; i < models.size(); i++){
         }
         return sb.toString();
     }
@@ -70,13 +101,12 @@ public class Moped implements Vehicle {
         if(!(obj instanceof Vehicle)) return false;
         Vehicle other = (Vehicle) obj;
         if(!(mark.equals(other.getMark()))) return false;
-        if(!(modelNames.size() == other.getSize())) return false;
-        for(int i = 0; i < modelNames.size(); i++){
-            String name = modelNames.get(i);
-            double price = modelPrices.get(i);
+        if(!(models.size() == other.getSize())) return false;
+        for(int i = 0; i < models.size(); i++){
+            String name = models.get(i).name;
             try {
                 if(!name.equals(other.getNames()[i])) return false;
-                if(price != other.getPrices()[i]) return false;
+                if(this.getPrice != other.getPrices()[i]) return false;
             } catch (ArrayIndexOutOfBoundsException e) {
                 return false;
             }
@@ -96,50 +126,46 @@ public class Moped implements Vehicle {
 
     @Override
     public void addNewModel(String name, double price) {
-        if(modelNames.contains(name)){
+        if(models.contains(name)){
             throw new IllegalArgumentException("Модель с именем " + name + " уже существует.");
         }
-        modelNames.add(name);
-        modelPrices.add(price);
+        models.add(name);
     }
 
     @Override
     public double getModelPrice(String name) {
-        int index = modelNames.indexOf(name);
+        int index = models.indexOf(name);
         if(index == -1){
             throw new IllegalArgumentException("Модель с именем " + name + " не найдена.");
         }
-        return modelPrices.get(index);
     }
 
     @Override
     public void deleteModel(String name) {
-        int index = modelNames.indexOf(name);
+        int index = models.indexOf(name);
         if(index == -1){
             throw new IllegalArgumentException("Модель с именем " + name + " не найдена.");
         }
-        modelNames.remove(index);
-        modelPrices.remove(index);
+        models.remove(index);
     }
 
     @Override
     public void setModelName(String oldName, String NewName) {  
-        int index = modelNames.indexOf(oldName);
+        int index = models.indexOf(oldName);
         if(index == -1){
             throw new IllegalArgumentException("Модель с именем " + oldName + " не найдена.");
         }
-        if(modelNames.contains(NewName)){
+        if(models.contains(NewName)){
             throw new IllegalArgumentException("Модель с именем " + NewName + " уже существует.");
         }
-        modelNames.set(index, NewName);
+        models.set(index, NewName);
     }
 
     @Override
     public Object clone() {
         try{
             Moped cloned = (Moped) super.clone();
-            cloned.modelNames = new LinkedList<>(this.modelNames);
-            cloned.modelPrices = new LinkedList<>(this.modelPrices);
+            cloned.models = new LinkedList<>(this.models);
             return cloned;
         }
         catch(CloneNotSupportedException e){
@@ -150,7 +176,6 @@ public class Moped implements Vehicle {
 
     @Override
     public int hashCode() {
-        return java.util.Objects.hash(mark, modelNames, modelPrices);
     }
     
 }

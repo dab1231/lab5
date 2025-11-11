@@ -14,8 +14,6 @@ public class TransportTools {
             Constructor<?> constructor = clazz.getConstructor(String.class, int.class);
             return (Vehicle) constructor.newInstance(mark, sizeModels);
 
-        } catch (NoSuchMethodException e) {
-            return null;
            
         } catch (Exception e) {
             return null;

@@ -1,21 +1,34 @@
 package Vehicle;
+import java.io.Serializable;
 import java.util.ArrayList;
+
+import Exceptions.DuplicateModelNameException;
+import Exceptions.ModelPriceOutOfBoundsException;
+import Exceptions.NoSuchModelNameException;
 
 public class Cuadro implements Vehicle {
     private String mark;
-    private ArrayList<String> modelNames;
-    private ArrayList<Double> modelPrices;
+    private ArrayList<Model> models;
+
+    public class Model implements Serializable{
+        private String name;
+        private double price;
+
+        public Model(String model, double price) {
+            this.name = model;
+            this.price = price;
+        }
+    }
 
     public Cuadro(String mark, int size){
         this.mark = mark;
-        this.modelNames = new ArrayList<>();
-        this.modelPrices = new ArrayList<>();
+        this.models = new ArrayList<>();
         if(size > 0){
             for(int i = 0; i < size; i++){
                 String name = String.format("%s%d", mark, i);
                 double price = 100000 + i * 50000;
-                modelNames.add(name);
-                modelPrices.add(price);
+                Model mod = new Model(name, price);
+                models.add(mod);
             }
         }
     }
@@ -27,30 +40,47 @@ public class Cuadro implements Vehicle {
 
     @Override
     public int getSize() {
-        return modelNames.size();
+        return models.size();
     }
 
     @Override
     public String[] getNames() {
-        return modelNames.toArray(new String[0]);
+        String[] names = new String[models.size()];
+        for(int i =0; i < models.size(); i++){
+            names[i] = models.get(i).name;
+        }
+        return names;
     }
 
     @Override
     public double[] getPrices() {
-        double[] prices = new double[modelPrices.size()];
-        for(int i = 0; i < modelPrices.size(); i++){
-            prices[i] = modelPrices.get(i);
+        double[] prices = new double[models.size()];
+        for(int i = 0; i < models.size(); i++){
+            prices[i] = models.get(i).price;
         }
         return prices;
     }
 
-    @Override
-    public void setModelPrice(String modelName, double newPrice) {
-        int index = modelNames.indexOf(modelName);
-        if(index == -1){
-            throw new IllegalArgumentException("Модель с именем " + modelName + " не найдена.");
+    public int findIndex(String nameMod){
+        for(int i = 0; i < models.size(); i++){
+            if(models.get(i).name.equals(nameMod)){
+                return i;
+            }
         }
-        modelPrices.set(index, newPrice);
+        return -1;
+    }
+
+    @Override
+    public void setModelPrice(String modelName, double newPrice) throws NoSuchModelNameException{
+        if(newPrice <= 0){
+            throw new ModelPriceOutOfBoundsException("не та цена"); 
+        }
+        int index = findIndex(modelName);
+        if (index == -1 ){
+            throw new NoSuchModelNameException(modelName);
+        }
+        models.get(index).price = newPrice;
+        
     }
 
     @Override
@@ -58,8 +88,8 @@ public class Cuadro implements Vehicle {
         StringBuilder sb = new StringBuilder();
         sb.append("Марка: ").append(mark).append("\n");
         sb.append("Модели:").append("\n");
-        for(int i = 0; i < modelNames.size(); i++){
-            sb.append("Название: ").append(modelNames.get(i)).append(", Цена: ").append(modelPrices.get(i)).append("\n");
+        for(int i = 0; i < models.size(); i++){
+            sb.append("Название: ").append(models.get(i).name).append(", Цена: ").append(models.get(i).price).append("\n");
         }
         return sb.toString();
     }
@@ -70,11 +100,11 @@ public class Cuadro implements Vehicle {
         if(!(obj instanceof Vehicle)) return false;
         Vehicle other = (Vehicle) obj;
         if(!(mark.equals(other.getMark()))) return false;
-        if(!(modelNames.size() == other.getSize())) return false;
+        if(!(models.size() == other.getSize())) return false;
 
-        for(int i = 0; i < modelNames.size(); i++){
-            String name = modelNames.get(i);
-            double price = modelPrices.get(i);
+        for(int i = 0; i < models.size(); i++){
+            String name = models.get(i).name;
+            double price = models.get(i).price;
             try {
                 if(!name.equals(other.getNames()[i])) return false;
                 if(!(price == other.getPrices()[i])) return false;
@@ -96,56 +126,70 @@ public class Cuadro implements Vehicle {
     }
 
     @Override
-    public double getModelPrice(String name) {
-        int index = modelNames.indexOf(name);
+    public double getModelPrice(String name) throws NoSuchModelNameException{
+        int index = findIndex(name);
+        return models.get(index).price;
+    }
+
+    @Override
+    public void addNewModel(String name, double price) throws DuplicateModelNameException{
+        if(price <= 0){
+            throw new ModelPriceOutOfBoundsException(name);
+        }
+        int index = findIndex(name);
         if(index == -1){
-            throw new IllegalArgumentException("Модель с именем " + name + " не найдена.");
+            throw new DuplicateModelNameException(name);
         }
-        return modelPrices.get(index);
+        models.add(new Model(name,price));
     }
 
     @Override
-    public void addNewModel(String name, double price) {
-        if(modelNames.contains(name)){
-            throw new IllegalArgumentException("Модель с именем " + name + " уже существует.");
-        }
-        modelNames.add(name);
-        modelPrices.add(price);
-    }
-
-    @Override
-    public void deleteModel(String name) {
-        int index = modelNames.indexOf(name);
+    public void deleteModel(String name) throws NoSuchModelNameException{
+        int index = findIndex(name);
         if(index == -1){
-            throw new IllegalArgumentException("Модель с именем " + name + " не найдена.");
+            throw new NoSuchModelNameException(name);
         }
-        modelNames.remove(index);
-        modelPrices.remove(index);
+        models.remove(index);
     }
 
     @Override
-    public void setModelName(String oldName, String NewName) {
-        int index = modelNames.indexOf(oldName);
+    public void setModelName(String oldName, String NewName) throws NoSuchModelNameException{
+        int index = findIndex(oldName);
         if(index == -1){
-            throw new IllegalArgumentException("Модель с именем " + oldName + " не найдена.");
+            throw new NoSuchModelNameException(oldName);
         }
-        if(modelNames.contains(NewName)){
-            throw new IllegalArgumentException("Модель с именем " + NewName + " уже существует.");
+        for(int i = 0; i < models.size(); i++){
+            if(models.get(i).name.equals(NewName) && !oldName.equals(NewName)){
+                throw new NoSuchModelNameException(NewName);
+            }
+            if(models.get(i).name.equals(oldName)){
+                index = i;
+            }
         }
-        modelNames.set(index, NewName);
+        models.get(index).name = NewName;
     }
 
     @Override
-    public Object clone() throws CloneNotSupportedException {
-        Cuadro cloned = (Cuadro) super.clone();
-        cloned.modelNames = new ArrayList<>(this.modelNames);
-        cloned.modelPrices = new ArrayList<>(this.modelPrices);
-        return cloned;
+    public Object clone() {
+        Cuadro res = null;
+        try{
+            Cuadro cloned = (Cuadro) super.clone();
+            if(this.models != null){
+                res.models = new ArrayList<>(this.models.size());
+                for(int i = 0; i < models.size(); i++){
+                    if(this.models.get(i) != null){
+                        res.models.add((Model) this.models.get(i).clone());
+                    }
+                }  
+            }
+        }catch(CloneNotSupportedException e){
+        }
+        return res;
     }
 
     @Override
     public int hashCode() {
-        return java.util.Objects.hash(mark, modelNames, modelPrices);
+        return java.util.Objects.hash(mark, models, models);
     }
     
 }
