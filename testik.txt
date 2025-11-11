@@ -1,9 +1,9 @@
-Auto
-Toyota
+Cuadro
+Suzuki
 3
-BMW0
-7904746,00
-BMW10
-4720705,00
-BMW20
-7588936,00
+Suzuki0
+100000,00
+Suzuki1
+150000,00
+Suzuki2
+200000,00

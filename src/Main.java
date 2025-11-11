@@ -1,5 +1,3 @@
-package Vehicle;
-
 import java.io.StringWriter;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -34,7 +32,6 @@ public class Main {
         try {
             System.out.println("\nДобавляем 'Model S'...");
             scooter.addNewModel("Model S", 50000.0);
-            System.out.println(scooter);
 
         } catch (Exception e) {
             System.out.println("ПРОВАЛ! Ошибка при добавлении: " + e.getMessage());
@@ -48,16 +45,14 @@ public class Main {
             if (newPrice != 55000.0) {
                 System.out.println("ПРОВАЛ! Цена не совпадает с ожидаемой.");
             }
-            System.out.println(scooter);
 
         } catch (Exception e) {
             System.out.println("ПРОВАЛ! Ошибка при изменении цены: " + e.getMessage());
         }
         System.out.println(scooter);
         try {
-            System.out.println("\nУдаляем 'Model S'...");
+            System.out.println("\nУдаляем 'Model X'...");
             scooter.deleteModel("Model S");
-            System.out.println(scooter);
 
         } catch (Exception e) {
             System.out.println("ПРОВАЛ! Ошибка при удалении: " + e.getMessage());
@@ -74,7 +69,6 @@ public class Main {
             System.out.println("\nДобавляем 'Raptor'...");
             cuadro.addNewModel("Raptor", 150000.0);
             double price = cuadro.getModelPrice("Raptor");
-            System.out.println(cuadro);
 
         } catch (Exception e) {
             System.out.println("ПРОВАЛ! Ошибка при добавлении: " + e.getMessage());
@@ -88,7 +82,6 @@ public class Main {
             if (newPrice != 160000.0) {
                 System.out.println("ПРОВАЛ! Цена не совпадает с ожидаемой.");
             }
-            System.out.println(cuadro);
 
         } catch (Exception e) {
             System.out.println("ПРОВАЛ! Ошибка при изменении цены: " + e.getMessage());
@@ -97,7 +90,6 @@ public class Main {
         try {
             System.out.println("\nУдаляем 'Raptor'...");
             cuadro.deleteModel("Raptor");
-            System.out.println(cuadro);
 
         } catch (Exception e) {
             System.out.println("ПРОВАЛ! Ошибка при удалении: " + e.getMessage());
@@ -113,7 +105,6 @@ public class Main {
             System.out.println("\nДобавляем 'Alpha'...");
             moped.addNewModel("Alpha", 80000.0);
             double price = moped.getModelPrice("Alpha");
-            System.out.println(moped);
 
         } catch (Exception e) {
             System.out.println("ПРОВАЛ! Ошибка при добавлении: " + e.getMessage());
@@ -127,7 +118,6 @@ public class Main {
             if (newPrice != 85000.0) {
                 System.out.println("ПРОВАЛ! Цена не совпадает с ожидаемой.");
             }
-            System.out.println(moped);
 
         } catch (Exception e) {
             System.out.println("ПРОВАЛ! Ошибка при изменении цены: " + e.getMessage());
@@ -137,7 +127,6 @@ public class Main {
         try {
             System.out.println("\nУдаляем 'Alpha'...");
             moped.deleteModel("Alpha");
-            System.out.println(moped);
 
         } catch (Exception e) {
             System.out.println("ПРОВАЛ! Ошибка при удалении: " + e.getMessage());

@@ -42,10 +42,10 @@ public class ReflectionTask {
             return;
         }
 
-        String className = args[0];      // Полное имя класса
-        String methodName = args[1];     // Имя метода
-        String modelName = args[2];      // Название модели
-        double prices = Double.parseDouble(args[3]);       // Новая цена
+        String className = args[0];      
+        String methodName = args[1];     
+        String modelName = args[2];      
+        double prices = Double.parseDouble(args[3]);
 
         try {
             Class<?> vehicleClass = Class.forName(className);
@@ -53,7 +53,7 @@ public class ReflectionTask {
 
             Vehicle vehicleInstance = (Vehicle) vehicleClass
                 .getConstructor(String.class, int.class)
-                .newInstance("TestMark", 3);
+                .newInstance("BMW", 3);
 
             System.out.println("=== Информация об автомобиле ДО изменения цены ===  ");
             System.out.println(vehicleInstance);
@@ -66,7 +66,6 @@ public class ReflectionTask {
 
             System.out.println("Вызываем метод: " + methodName + "(\"" + modelName + "\", " + prices + ")");
             method.invoke(vehicleInstance, modelName, prices);
-            System.out.println("Метод успешно выполнен!");
 
             System.out.println("=== Информация об автомобиле ПОСЛЕ изменения цены ===  ");
             System.out.println(vehicleInstance);
