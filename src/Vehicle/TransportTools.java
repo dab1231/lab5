@@ -164,7 +164,7 @@ public class TransportTools {
         
         for (int i = 0; i < names.length; i++) {
             pw.printf("%s\n",names[i]);
-            pw.printf("%.2f\n",prices[i]);
+            pw.printf("%.2f\n",prices[i]); 
         }
         
         pw.flush();
@@ -175,7 +175,7 @@ public class TransportTools {
 
         String type = sc.nextLine();
         
-        String mark = sc.nextLine();
+        String mark = sc.nextLine();   
         
         int size = sc.nextInt();
         sc.nextLine();

@@ -1,7 +1,5 @@
-import java.io.StringWriter;
 import java.io.FileReader;
 import java.io.FileWriter;
-import java.io.StringReader;
 import Vehicle.Auto;
 import Vehicle.Motorcycle;
 import Vehicle.Vehicle;
@@ -9,8 +7,6 @@ import Vehicle.TransportTools;
 import Vehicle.Scooter;
 import Vehicle.Cuadro;
 import Vehicle.Moped;
-import Exceptions.DuplicateModelNameException;
-import Exceptions.NoSuchModelNameException;
 
 public class Main {
 

@@ -1,8 +1,4 @@
 import Vehicle.Vehicle;
-import Vehicle.Auto;
-import Vehicle.Motorcycle;
-
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 public class ReflectionTask {
